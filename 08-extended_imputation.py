@@ -37,3 +37,7 @@ predictions = model.predict(imputed_val_X)
 
 print(f"The MAE is : {mean_absolute_error(val_y,predictions)}")
 
+print(train_X.shape)
+
+missing_val_count_by_column = (train_X.isnull().sum())
+print(missing_val_count_by_column[missing_val_count_by_column > 0])
