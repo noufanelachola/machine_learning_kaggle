@@ -3,9 +3,13 @@ from sklearn.ensemble import RandomForestRegressor
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import mean_absolute_error
 
-data = pd.read_csv("./melb_data.csv")
+def score_dataset(X_train,X_val,y_train,y_val):
+    model = RandomForestRegressor(random_state=1)
+    model.fit(X_train,y_train)
+    prediction = model.predict(X_val)
+    return mean_absolute_error(y_val,prediction)
 
-model = RandomForestRegressor(random_state=1)
+data = pd.read_csv("./melb_data.csv")
 
 y = data.Price
 X = data.drop("Price",axis=1)
@@ -27,16 +31,12 @@ x_train = X_train[my_cols].copy()
 x_val = X_val[my_cols].copy()
 
 
-print(f"low cardintity : {low_cardinity_cols}")
-print(f"numerial cols : {numerical_cols}")
-
-print(x_train.head())
+s = x_train.dtypes == "object"
+object_cols = list(s[s].index)
 
 
-# model.fit(X_train,y_train)
-# prediction = model.predict(X_val)
 
-# print(f"MEAN Absolute Error : {mean_absolute_error(y_val,prediction)}")
+
 
 
 
