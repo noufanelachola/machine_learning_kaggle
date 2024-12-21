@@ -30,9 +30,30 @@ my_cols = low_cardinity_cols + numerical_cols
 x_train = X_train[my_cols].copy()
 x_val = X_val[my_cols].copy()
 
-
 s = x_train.dtypes == "object"
 object_cols = list(s[s].index)
+
+# Approach 1 (Drop column)
+drop_x_train = x_train.select_dtypes(exclude=["object"])
+drop_x_valid = x_val.select_dtypes(exclude=["object"])
+
+print(f"MAE approach 1 : {score_dataset(drop_x_train,drop_x_valid,y_train,y_val)}")
+
+
+# Approach 2 (Ordinal Encoding)
+from sklearn.preprocessing import OrdinalEncoder
+
+label_x_train = x_train.copy()
+label_x_valid = x_val.copy()
+
+ordinalEncoder = OrdinalEncoder()
+
+label_x_train[object_cols] = ordinalEncoder.fit_transform(x_train[object_cols])
+label_x_valid[object_cols] = ordinalEncoder.transform(x_val[object_cols])
+
+
+print(f"MAE approach 2 : {score_dataset(label_x_train,label_x_valid,y_train,y_val)}")
+
 
 
 
